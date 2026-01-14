@@ -49,45 +49,42 @@
     * Jupyter
 * For our example we are going to start with the `jammy` Ubuntu image.
 * To do that we need to open up a text editor and create the base of our container.
-```#Start from bionic base Ubuntu image.
+```
+#Start from bionic base Ubuntu image.
 FROM ubuntu:jammy
 ```
 
 ### 2. Install Software and Software Dependencies
 
-The next step is to determine what software we’re going to install.
-
-For this example we’ll be installing a software called cowsay.
-
-To do this, we’ll have to use apt-get to install the software.
-
-First we’ll want to do an update using the following command.
-
+* The next step is to determine what software we’re going to install.
+* For this example we’ll be installing a software called cowsay.
+* To do this, we’ll have to use apt-get to install the software.
+* First we’ll want to do an update using the following command.
+```
 RUN apt-get update
-
-Then we need to actually install cowsay. In the install, since we’re installing in a Docker image, we’ll want to use some options to make it cleaner.
-
-The command should look like the following.
-
+```
+* Then we need to actually install cowsay. In the install, since we’re installing in a Docker image, we’ll want to use some options to make it cleaner.
+* The command should look like the following.
+```
 RUN apt-get install -y --no-install-recommends cowsay
-
-Once all of the software we want to install has been installed, we will want to run a clean to help keep our image clean and smaller.
-
+```
+* Once all of the software we want to install has been installed, we will want to run a clean to help keep our image clean and smaller.
+```
 RUN apt-get clean
-
-We can run all the apt-get commands with the same RUN command if we wish, by utilizing &&. Now our Dockerfile should look like the following.
-
+```
+* We can run all the apt-get commands with the same RUN command if we wish, by utilizing `&&`. Now our Dockerfile should look like the following.
+```
 RUN apt-get update \
     && apt-get install -y --no-install-recommends cowsay \
     && apt-get clean
-
-We next will need to add the directory where cowsay is installed to the PATH variable so that we can use the software.
-
+```
+* We next will need to add the directory where cowsay is installed to the PATH variable so that we can use the software.
+```
 ENV PATH="$PATH:/usr/games"
 RUN export PATH
-
-Now our Dockerfile should look like the following.
-
+```
+* Now our Dockerfile should look like the following.
+```
 #Start from bionic base Ubuntu image.
 FROM ubuntu:bionic
 
@@ -99,8 +96,9 @@ RUN apt-get update \
 #Add cowsay to the PATH variable
 ENV PATH="$PATH:/usr/games"
 RUN export PATH
+```
 
-3. Build, Test, and Upload An Image
+### 3. Build, Test, and Upload An Image
 
 Once you have your Dockerfile saved within a directory (folder) designed for the image, the next step is to build the container.
 
