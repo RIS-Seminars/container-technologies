@@ -37,18 +37,19 @@
 * The first thing you’ll want to when creating a docker container, is decide what type of container you want to start with as the base.
 * You can start with a base container of just an operating system, like Ubuntu, or you can start with a container that already has software installed.
 * Basic OS Docker Containers (This list is not comprehensive.)
-    * Ubuntu
-    * debian
-    * CentOS
-    * Alpine
-    * Windows
+    * [Ubuntu](https://hub.docker.com/_/ubuntu)
+    * [debian](https://hub.docker.com/_/debian)
+    * [CentOS](https://hub.docker.com/_/centos)
+    * [Alpine](https://hub.docker.com/_/alpine)
+    * [Windows](https://hub.docker.com/_/microsoft-windows-base-os-images)
 * Base Software Docker Containers (This list is not comprehensive.)
-    * R
-    * Python
-    * Miniconda
-    * Jupyter
+    * [R](https://hub.docker.com/_/r-base)
+    * [Python](https://hub.docker.com/_/python)
+    * [Miniconda](https://hub.docker.com/r/continuumio/miniconda3)
+    * [Jupyter](https://hub.docker.com/u/jupyter)
 * For our example we are going to start with the `jammy` Ubuntu image.
 * To do that we need to open up a text editor and create the base of our container.
+
 ```
 #Start from bionic base Ubuntu image.
 FROM ubuntu:jammy
@@ -60,30 +61,41 @@ FROM ubuntu:jammy
 * For this example we’ll be installing a software called cowsay.
 * To do this, we’ll have to use apt-get to install the software.
 * First we’ll want to do an update using the following command.
+
 ```
 RUN apt-get update
 ```
+
 * Then we need to actually install cowsay. In the install, since we’re installing in a Docker image, we’ll want to use some options to make it cleaner.
 * The command should look like the following.
+
 ```
 RUN apt-get install -y --no-install-recommends cowsay
 ```
+
 * Once all of the software we want to install has been installed, we will want to run a clean to help keep our image clean and smaller.
+
 ```
 RUN apt-get clean
 ```
+
 * We can run all the apt-get commands with the same RUN command if we wish, by utilizing `&&`. Now our Dockerfile should look like the following.
+
 ```
 RUN apt-get update \
     && apt-get install -y --no-install-recommends cowsay \
     && apt-get clean
 ```
+
 * We next will need to add the directory where cowsay is installed to the PATH variable so that we can use the software.
+
 ```
 ENV PATH="$PATH:/usr/games"
 RUN export PATH
 ```
+
 * Now our Dockerfile should look like the following.
+
 ```
 #Start from bionic base Ubuntu image.
 FROM ubuntu:bionic
@@ -102,24 +114,32 @@ RUN export PATH
 
 * Once you have your Dockerfile saved within a directory (folder) designed for the image, the next step is to build the container.
 * The Docker base command to build a Docker container from a Dockerfile, looks like the following.
+
 ```
 docker build -t username/container-name:tag directory
 ```
+
 * In our case, we’ll be using a directory named docker-example and we’ll simply call the container `docker-example`.
 * `username` refers to your Docker Hub username.
 * So, our Docker build command should look like the following.
+
 ```
 docker build -t username/docker-example:latest docker-example/
 ```
+
 * Or if we are within the directory for the Docker image it should look like the following.
+
 ```
 docker build -t username/docker-example:latest .
 ```
+
 > [!Note]
 > If you are using a Mac that has the newer Mac chips, you will need to add the following option to your build command.
 >
 > `--platform linux/amd64`
+
 * If it builds successfully, you should get output of information about the building process, but at the end you’ll see the following.
+
 ```
 [+] Building 14.3s (8/8) FINISHED                                                                                                                                                                                                 docker:desktop-linux
  => [internal] load build definition from Dockerfile                                                                                                                                                                                              0.0s
@@ -143,16 +163,22 @@ docker build -t username/docker-example:latest .
  => => naming to docker.io/elynrfw/docker-example:latest                                                                                                                                                                                          0.0s
  => => unpacking to docker.io/elynrfw/docker-example:latest                                                                                                                                                                                       0.6s
 ```
+
 * Now we can run the Docker image we’ve created.
 * The base Docker run command is as follows.
+
 ```
 docker run username/container-name:tag command
 ```
+
 * For our example image, this will look like the following.
+
 ```
 docker run username/docker-example:latest cowsay "Hello World"
 ```
+
 * Your output should look like the following.
+
 ```
  _____________
 < Hello World >
@@ -163,16 +189,22 @@ docker run username/docker-example:latest cowsay "Hello World"
                 ||----w |
                 ||     ||
 ```
+
 * Once we are certain our Docker image is functioning correctly, we can then push it to Docker Hub.
 * The basic push command looks as follows.
+
 ```
 docker push username/container-name:tag
 ```
+
 * For our example the command should look like the following.
+
 ```
 docker push username/docker-example:latest
 ```
+
 * You should see output like the following for the push.
+
 ```
 % docker push elynrfw/docker-example:latest
 The push refers to repository [docker.io/elynrfw/docker-example]
@@ -189,17 +221,22 @@ latest: digest: sha256:e0df366baddc2b3beed504b390ef44b5cf2745de5f3ea02b36cae5843
 * We can do this by also installing the fortune library into our docker container.
 * Luckily, once our base image has been designed this requires changing only 1 line in our Dockerfile.
 * We will add fortune and fortunes to our `apt-get install` command, like the following.
+
 ```
 && apt-get install -y --no-install-recommends cowsay fortune fortunes \
 ```
+
 * Once that is changed, we can save the Dockerfile and rebuild the image.
 * Now we can pipe fortune into cowsay and create our fortune telling cow.
 * Unfortunately when running Docker, to be able to use the pipe command we need to add /bin/bash -c to our command.
 * So our new Docker run command should look like the following.
+
 ```
 docker run username/docker-example:latest /bin/bash -c "fortune | cowsay"
 ```
+
 * If everything is working correctly, we should get output like the following.
+
 ```
  ________________________________________
 / The way to love anything is to realize \
@@ -211,8 +248,10 @@ docker run username/docker-example:latest /bin/bash -c "fortune | cowsay"
                 ||----w |
                 ||     ||
 ```
+
 * You can re-upload your image to Docker Hub so that you have the newest image available for the next part.
 * Your complete Dockerfile should now look like the following.
+
 ```
 #Start from jammy base Ubuntu image.
 FROM ubuntu:jammy
@@ -230,15 +269,22 @@ RUN export PATH
 ## Using a Docker Container on the Compute2 Platform
 
 * Now that we have our docker container created and uploaded to Docker Hub, we can use it to run the software we installed on the RIS Compute2 Platform.
+
 > [!NOTE]
-> If you are not knowledgeable on how to use the RIS Compute Platform, you can go over the following documentation. [Compute2 Quickstart](https://washu.atlassian.net/wiki/spaces/RUD/pages/2304147627/Quickstart+Guides#cfm-tab-1-2) 
+> If you are not knowledgeable on how to use the RIS Compute Platform, you can go over the following documentation.
+>
+> [Compute2 Quickstart](https://washu.atlassian.net/wiki/spaces/RUD/pages/2304147627/Quickstart+Guides#cfm-tab-1-2) 
+
 * To get the output we want on the RIS Compute Platform, we will have to use the following commands.
+
 ```
 srun -A compute2-group -p general-interactive --container-image="username/docker-example:latest" --pty /bin/bash -c "fortune | cowsay"
 ```
+
 * Again, in this case the username is your Docker Hub username.
 * `compute2-group` is the Compute2 Account or Group that you are part of.
 * If everything is working correctly, you should see results like the following.
+
 ```
 srun: job 204631 queued and waiting for resources
 srun: job 204631 has been allocated resources
@@ -254,8 +300,10 @@ pyxis: imported docker image: elynrfw/docker-example:latest
                 ||----w |
                 ||     ||
 ```
+
 * `cowsay` has a fun little additional aspect. If a fortune telling cow isn’t fantastic enough, we can always use a dragon.
 * If you add the `-f dragon` option to the cowsay command, you can turn your cow into a dragon.
+
 ```
 srun -A compute2-group -p general-interactive --container-image="username/docker-example:latest" --pty /bin/bash -c "fortune | cowsay -f dragon"
 srun: job 204633 queued and waiting for resources
@@ -283,6 +331,7 @@ pyxis: imported docker image: elynrfw/docker-example:latest
                ///-._ _ _ _ _ _ _}^ - - - - ~                     ~-- ,.-~
                                                                   /.-~
 ```
+
 ## Advanced Container Addition
 
 As an advanced step, we can add another library that will add color to our cows and dragons.
