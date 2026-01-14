@@ -100,22 +100,45 @@ RUN export PATH
 
 ### 3. Build, Test, and Upload An Image
 
-Once you have your Dockerfile saved within a directory (folder) designed for the image, the next step is to build the container.
-
-The Docker base command to build a Docker container from a Dockerfile, looks like the following.
-
+* Once you have your Dockerfile saved within a directory (folder) designed for the image, the next step is to build the container.
+* The Docker base command to build a Docker container from a Dockerfile, looks like the following.
+```
 docker build -t username/container-name:tag directory
-
-In our case, we’ll be using a directory named docker-example and we’ll simply call the container docker-example.
-
-username refers to your Docker Hub username.
-
-So, our Docker build command should look like the following.
-
+```
+* In our case, we’ll be using a directory named docker-example and we’ll simply call the container `docker-example`.
+* `username` refers to your Docker Hub username.
+* So, our Docker build command should look like the following.
+```
 docker build -t username/docker-example:latest docker-example/
-
-If it builds successfully, you should get output of information about the building process, but at the end you’ll see the following.
-
+```
+* Or if we are within the directory for the Docker image it should look like the following.
+```
+docker build -t username/docker-example:latest .
+```
+* If it builds successfully, you should get output of information about the building process, but at the end you’ll see the following.
+```
+[+] Building 14.3s (8/8) FINISHED                                                                                                                                                                                                 docker:desktop-linux
+ => [internal] load build definition from Dockerfile                                                                                                                                                                                              0.0s
+ => => transferring dockerfile: 314B                                                                                                                                                                                                              0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:jammy                                                                                                                                                                                   1.9s
+ => [auth] library/ubuntu:pull token for registry-1.docker.io                                                                                                                                                                                     0.0s
+ => [internal] load .dockerignore                                                                                                                                                                                                                 0.0s
+ => => transferring context: 2B                                                                                                                                                                                                                   0.0s
+ => [1/3] FROM docker.io/library/ubuntu:jammy@sha256:104ae83764a5119017b8e8d6218fa0832b09df65aae7d5a6de29a85d813da2fb                                                                                                                             2.8s
+ => => resolve docker.io/library/ubuntu:jammy@sha256:104ae83764a5119017b8e8d6218fa0832b09df65aae7d5a6de29a85d813da2fb                                                                                                                             0.0s
+ => => sha256:0ec3d86457676c7af7a3b6d29565e0e8b30ed98afe5d606e00e565101f812623 27.38MB / 27.38MB                                                                                                                                                  2.5s
+ => => extracting sha256:0ec3d86457676c7af7a3b6d29565e0e8b30ed98afe5d606e00e565101f812623                                                                                                                                                         0.3s
+ => [2/3] RUN apt-get update     && apt-get install -y --no-install-recommends cowsay fortune fortunes lolcat     && apt-get clean                                                                                                                6.1s
+ => [3/3] RUN export PATH                                                                                                                                                                                                                         0.1s 
+ => exporting to image                                                                                                                                                                                                                            3.2s 
+ => => exporting layers                                                                                                                                                                                                                           2.6s 
+ => => exporting manifest sha256:6ada80510c155c3d18fcd83aed701243066c2230d485433614fec9d8f5eec3e5                                                                                                                                                 0.0s 
+ => => exporting config sha256:049730cd7aabeabe314872b2f852373136f77a1193ee722b615ab42787b94ef7                                                                                                                                                   0.0s 
+ => => exporting attestation manifest sha256:83ac6ae135efff31264682eb37335ec113c97d114eacb864898152467244e6f7                                                                                                                                     0.0s 
+ => => exporting manifest list sha256:e0df366baddc2b3beed504b390ef44b5cf2745de5f3ea02b36cae58433bddeb6                                                                                                                                            0.0s
+ => => naming to docker.io/elynrfw/docker-example:latest                                                                                                                                                                                          0.0s
+ => => unpacking to docker.io/elynrfw/docker-example:latest                                                                                                                                                                                       0.6s
+```
 Now we can run the Docker image we’ve created.
 
 The base Docker run command is as follows.
@@ -136,7 +159,7 @@ docker push username/container-name:tag
 
 You should see output like the following for the push.
 
-4. Expanding An Image
+### 4. Expanding An Image
 
 While it’s fun to tell our cow what to say, what if we had it say randomly generated fortunes?
 
