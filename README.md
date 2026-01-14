@@ -347,37 +347,43 @@ bsub -Is -q workshop-interactive -G compute-workshop -a 'docker(username/docker-
 
 ## Example of Using the Compute2 Platform for Development
 
-As mentioned before you can develop a Docker image on the Compute Platform.
+* As mentioned before you can develop a Docker image on the Compute Platform(s).
+* The first thing you’ll need to do is load the required modules in order to build containers.
+* For this demonstration we will be using Podman which will build a Docker container.
 
-The first thing you’ll need to do is let Docker Hub know your credentials by using the following command.
+```
+module load ris
+module load podman
+```
 
-LSB_DOCKER_LOGIN_ONLY=1 bsub -G compute-workshop -q workshop-interactive -Is -a 'docker_build' -- .
+* Once you have this set, you can start development of your Docker image.
+* For this simple example, we’ll use the vi text editor that’s available on the Compute Platform to edit our Dockerfile.
+* It is also suggested that you work out of a Storage directory for most images. For this example, it is ok to work from your home directory.
+* You need to create a directory called docker-example and then cd into that directory.
+* Once in the docker-example directory, you will need to create your Dockerfile via the following command
 
-This command only needs to be done once and will ask for your Docker Hub credentials (you’ll need an Docker Hub account prior to this step).
-
-The login credentials you’ll need to use are those for Docker Hub NOT your WashU credentials.
-
-Once you have this set, you can start development of your Docker image.
-
-If you wish to use the Compute Platform to develop images or other software, we suggest checking out our documentation on doing so (Coming Soon!).
-
-For this simple example, we’ll use the vi text editor that’s available on the Compute Platform.
-
-You need to create a directory called docker-example and then cd into that directory.
-
-Once in the docker-example directory, you will need to create your Dockerfile via the following command
-
+```
 vi Dockerfile
+```
 
-Once in the editor you will need to press the I key to be able to edit the file. Now you just need to put in the information in the Dockerfile like developed above.
+* Once in the editor you will need to press the `I` key to be able to edit the file. Now you just need to put in the information in the Dockerfile like developed above.
+* Once you’ve entered the info, then you press the escape key to disengage edit mode.
+* Then you need to press the `:` key and type `wq` and hit the Enter key. This will write your changes and quit the editor.
+* Now you can use the cat command on your file to make sure it contains the correct information.
+* The next step will be to create a directory that holds the VM and container data the Podman uses.
+* It is recommended to do this in either a scratch or storage location.
 
-Once you’ve entered the info, then you press the escape key to disengage edit mode.
+```
+mkdir -p /storageN/fs1/allocation_name/podman/runtime
+```
+* Then we will need to start up an interactive job with variables that are set to the directory that we created.
 
-Then you need to press the : key and type wq and hit the Enter key. This will write your changes and quit the editor.
-
-Now you can use the cat command on your file to make sure it contains the correct information.
-
-In order to build and push our Docker image, we need to cd back out of docker-example directory.
+```
+XDG_CONFIG_HOME=/scratch2/fs1/allocation_name/podman \         # defualt: $HOME/.config 
+XDG_DATA_HOME=/scratch2/fs1/allocation_name/podman \           # default: $HOME/.local/share 
+XDG_RUNTIME_DIR=/scratch2/fs1/allocation_name/podman/runtime \ # default: /run/user/$UID 
+srun -A compute2-group -p general-interactive --pty /bin/bash
+```
 
 Then we need to use the following command to build and push our Docker image.
 
