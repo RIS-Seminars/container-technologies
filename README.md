@@ -117,6 +117,7 @@ docker build -t username/docker-example:latest .
 ```
 > [!Note]
 > If you are using a Mac that has the newer Mac chips, you will need to add the following option to your build command.
+>
 > `--platform linux/amd64`
 * If it builds successfully, you should get output of information about the building process, but at the end you’ll see the following.
 ```
@@ -257,7 +258,10 @@ pyxis: imported docker image: elynrfw/docker-example:latest
 * If you add the `-f dragon` option to the cowsay command, you can turn your cow into a dragon.
 ```
 srun -A compute2-group -p general-interactive --container-image="username/docker-example:latest" --pty /bin/bash -c "fortune | cowsay -f dragon"
-
+srun: job 204633 queued and waiting for resources
+srun: job 204633 has been allocated resources
+pyxis: importing docker image: elynrfw/docker-example:latest
+pyxis: imported docker image: elynrfw/docker-example:latest
  ________________________________________
 / The way to love anything is to realize \
 \ that it might be lost.                 /
