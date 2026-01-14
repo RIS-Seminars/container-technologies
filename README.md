@@ -115,6 +115,9 @@ docker build -t username/docker-example:latest docker-example/
 ```
 docker build -t username/docker-example:latest .
 ```
+> [!Note]
+> If you are using a Mac that has the newer Mac chips, you will need to add the following option to your build command.
+> `--platform linux/amd64`
 * If it builds successfully, you should get output of information about the building process, but at the end you’ll see the following.
 ```
 [+] Building 14.3s (8/8) FINISHED                                                                                                                                                                                                 docker:desktop-linux
@@ -225,28 +228,57 @@ RUN export PATH
 
 ## Using a Docker Container on the Compute2 Platform
 
-Now that we have our docker container created and uploaded to Docker Hub, we can use it to run the software we installed on the RIS Compute Platform.
+* Now that we have our docker container created and uploaded to Docker Hub, we can use it to run the software we installed on the RIS Compute2 Platform.
+> [!NOTE]
+> If you are not knowledgeable on how to use the RIS Compute Platform, you can go over the following documentation. [Compute2 Quickstart](https://washu.atlassian.net/wiki/spaces/RUD/pages/2304147627/Quickstart+Guides#cfm-tab-1-2) 
+* To get the output we want on the RIS Compute Platform, we will have to use the following commands.
+```
+srun -A compute2-group -p general-interactive --container-image="username/docker-example:latest" --pty /bin/bash -c "fortune | cowsay"
+```
+* Again, in this case the username is your Docker Hub username.
+* `compute2-group` is the Compute2 Account or Group that you are part of.
+* If everything is working correctly, you should see results like the following.
+```
+srun: job 204631 queued and waiting for resources
+srun: job 204631 has been allocated resources
+pyxis: importing docker image: elynrfw/docker-example:latest
+pyxis: imported docker image: elynrfw/docker-example:latest
+ ________________________________________
+/ The way to love anything is to realize \
+\ that it might be lost.                 /
+ ----------------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+```
+* `cowsay` has a fun little additional aspect. If a fortune telling cow isn’t fantastic enough, we can always use a dragon.
+* If you add the `-f dragon` option to the cowsay command, you can turn your cow into a dragon.
+```
+srun -A compute2-group -p general-interactive --container-image="username/docker-example:latest" --pty /bin/bash -c "fortune | cowsay -f dragon"
 
-If you are not knowledgeable on how to use the RIS Compute Platform, you can go over the following documentation. https://washu.atlassian.net/wiki/spaces/RUD/pages/1683489040/Compute1+Quickstart?atlOrigin=eyJpIjoiNDg4OWE2MWE5YTJkNGVhYjgzMzlmODdlMmIzMjc2MTciLCJwIjoiYyJ9 
-
-To get the output we want on the RIS Compute Platform, we will have to use the following commands.
-
-export LSF_DOCKER_PRESERVE_ENVIRONMENT=false
-bsub -Is -q workshop-interactive -G compute-workshop -a 'docker(username/docker-example:latest)' /bin/bash -c "fortune | cowsay"
-
-We need to use the LSF_DOCKER_PRESERVE_ENVIRONMENT variable because we had to set environment variables within our container and we want to use those instead of preserving those on the Compute Platform.
-
-Again, in this case the username is your Docker Hub username.
-
-If everything is working correctly, you should see results like the following.
-
-cowsay has a fun little additional aspect. If a fortune telling cow isn’t fantastic enough, we can always use a dragon.
-
-If you add the -f dragon option to the cowsay command, you can turn your cow into a dragon.
-
-export LSF_DOCKER_PRESERVE_ENVIRONMENT=false
-bsub -Is -q workshop-interactive -G compute-workshop -a 'docker(username/docker-example:latest)' /bin/bash -c "fortune | cowsay -f dragon"
-
+ ________________________________________
+/ The way to love anything is to realize \
+\ that it might be lost.                 /
+ ----------------------------------------
+      \                    / \  //\
+       \    |\___/|      /   \//  \\
+            /0  0  \__  /    //  | \ \    
+           /     /  \/_/    //   |  \  \  
+           @_^_@'/   \/_   //    |   \   \ 
+           //_^_/     \/_ //     |    \    \
+        ( //) |        \///      |     \     \
+      ( / /) _|_ /   )  //       |      \     _\
+    ( // /) '/,_ _ _/  ( ; -.    |    _ _\.-~        .-~~~^-.
+  (( / / )) ,-{        _      `-.|.-~-.           .~         `.
+ (( // / ))  '/\      /                 ~-. _ .-~      .-~^-.  \
+ (( /// ))      `.   {            }                   /      \  \
+  (( / ))     .----~-.\        \-'                 .~         \  `. \^-.
+             ///.----..>        \             _ -~             `.  ^-`  ^-_
+               ///-._ _ _ _ _ _ _}^ - - - - ~                     ~-- ,.-~
+                                                                  /.-~
+```
 ## Advanced Container Addition
 
 As an advanced step, we can add another library that will add color to our cows and dragons.
