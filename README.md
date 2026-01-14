@@ -139,25 +139,46 @@ docker build -t username/docker-example:latest .
  => => naming to docker.io/elynrfw/docker-example:latest                                                                                                                                                                                          0.0s
  => => unpacking to docker.io/elynrfw/docker-example:latest                                                                                                                                                                                       0.6s
 ```
-Now we can run the Docker image we’ve created.
-
-The base Docker run command is as follows.
-
+* Now we can run the Docker image we’ve created.
+* The base Docker run command is as follows.
+```
 docker run username/container-name:tag command
-
-For our example image, this will look like the following.
-
-docker run username/docker-example:latest cowsay "Hello World!"
-
-Your output should look like the following.
-
-Once we are certain our Docker image is functioning correctly, we can then push it to Docker Hub.
-
-The basic push command looks as follows.
-
+```
+* For our example image, this will look like the following.
+```
+docker run username/docker-example:latest cowsay "Hello World"
+```
+* Your output should look like the following.
+```
+% docker run elynrfw/docker-example:latest cowsay "Hello World"
+ _____________
+< Hello World >
+ -------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+```
+* Once we are certain our Docker image is functioning correctly, we can then push it to Docker Hub.
+* The basic push command looks as follows.
+```
 docker push username/container-name:tag
-
-You should see output like the following for the push.
+```
+* For our example the command should look like the following.
+```
+docker push username/docker-example:latest
+```
+* You should see output like the following for the push.
+```
+% docker push elynrfw/docker-example:latest
+The push refers to repository [docker.io/elynrfw/docker-example]
+53021aadb317: Pushed 
+4f4fb700ef54: Pushed 
+0ec3d8645767: Pushed 
+44cea8a09479: Pushed 
+latest: digest: sha256:e0df366baddc2b3beed504b390ef44b5cf2745de5f3ea02b36cae58433bddeb6 size: 855
+```
 
 ### 4. Expanding An Image
 
