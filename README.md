@@ -22,54 +22,38 @@
 * A container is a virtual machine (VM), that runs software applications.
 * This means that a container is virtual computer that has an operating system (OS) and whatever software users installed.
 * Docker has created a syntax language for creating these virtual computers which get referred to then as Docker containers.
-* You can find more information about why RIS chose Docker and containers here.
+* You can find more information about why RIS chose Docker and containers [here.](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705115761/Docker+and+the+RIS+Compute1+Platform?atlOrigin=eyJpIjoiNTdkZGE2ZGU0MTYwNDA5NmJhNzM2ODY4OGU1ZGYzOTYiLCJwIjoiYyJ9)
 
 ## Where can I find Docker?
 
-You can find official Docker documentation here.
-
-You can find Docker containers and a place to host Docker containers here.
-
-You can download Docker here.
+* You can find official Docker documentation [here.](https://docs.docker.com/)
+* You can find Docker containers and a place to host Docker containers [here.](https://hub.docker.com/)
+* You can download Docker [here.](https://www.docker.com/products/docker-desktop)
 
 ## Creating a Docker Container
 
-1. Decide The Base Container
+### 1. Decide The Base Container
 
-The first thing you’ll want to when creating a docker container, is decide what type of container you want to start with as the base.
+* The first thing you’ll want to when creating a docker container, is decide what type of container you want to start with as the base.
+* You can start with a base container of just an operating system, like Ubuntu, or you can start with a container that already has software installed.
+* Basic OS Docker Containers (This list is not comprehensive.)
+    * Ubuntu
+    * debian
+    * CentOS
+    * Alpine
+    * Windows
+* Base Software Docker Containers (This list is not comprehensive.)
+    * R
+    * Python
+    * Miniconda
+    * Jupyter
+* For our example we are going to start with the `jammy` Ubuntu image.
+* To do that we need to open up a text editor and create the base of our container.
+```#Start from bionic base Ubuntu image.
+FROM ubuntu:jammy
+```
 
-You can start with a base container of just an operating system, like Ubuntu, or you can start with a container that already has software installed.
-
-Basic OS Docker Containers (This list is not comprehensive.)
-
-Ubuntu
-
-debian
-
-CentOS
-
-Alpine
-
-Windows
-
-Base Software Docker Containers (This list is not comprehensive.)
-
-R
-
-Python
-
-Miniconda
-
-Jupyter
-
-For our example we are going to start with the bionic Ubuntu image.
-
-To do that we need to open up a text editor and create the base of our container.
-
-#Start from bionic base Ubuntu image.
-FROM ubuntu:bionic
-
-2. Install Software and Software Dependencies
+### 2. Install Software and Software Dependencies
 
 The next step is to determine what software we’re going to install.
 
