@@ -150,7 +150,6 @@ docker run username/docker-example:latest cowsay "Hello World"
 ```
 * Your output should look like the following.
 ```
-% docker run elynrfw/docker-example:latest cowsay "Hello World"
  _____________
 < Hello World >
  -------------
@@ -182,34 +181,37 @@ latest: digest: sha256:e0df366baddc2b3beed504b390ef44b5cf2745de5f3ea02b36cae5843
 
 ### 4. Expanding An Image
 
-While it’s fun to tell our cow what to say, what if we had it say randomly generated fortunes?
-
-We can do this by also installing the fortune library into our docker container.
-
-Luckily, once our base image has been designed this requires changing only 1 line in our Dockerfile.
-
-We will add fortune and fortunes to our apt-get install command, like the following.
-
+* While it’s fun to tell our cow what to say, what if we had it say randomly generated fortunes?
+* We can do this by also installing the fortune library into our docker container.
+* Luckily, once our base image has been designed this requires changing only 1 line in our Dockerfile.
+* We will add fortune and fortunes to our `apt-get install` command, like the following.
+```
 && apt-get install -y --no-install-recommends cowsay fortune fortunes \
-
-Once that is changed, we can save the Dockerfile and rebuild the image.
-
-Now we can pipe fortune into cowsay and create our fortune telling cow.
-
-Unfortunately when running Docker, to be able to use the pipe command we need to add /bin/bash -c to our command.
-
-So our new Docker run command should look like the following.
-
+```
+* Once that is changed, we can save the Dockerfile and rebuild the image.
+* Now we can pipe fortune into cowsay and create our fortune telling cow.
+* Unfortunately when running Docker, to be able to use the pipe command we need to add /bin/bash -c to our command.
+* So our new Docker run command should look like the following.
+```
 docker run username/docker-example:latest /bin/bash -c "fortune | cowsay"
-
-If everything is working correctly, we should get output like the following.
-
-You can re-upload your image to Docker Hub so that you have the newest image available for the next part.
-
-Your complete Dockerfile should now look like the following.
-
-#Start from bionic base Ubuntu image.
-FROM ubuntu:bionic
+```
+* If everything is working correctly, we should get output like the following.
+```
+ ________________________________________
+/ The way to love anything is to realize \
+\ that it might be lost.                 /
+ ----------------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+```
+* You can re-upload your image to Docker Hub so that you have the newest image available for the next part.
+* Your complete Dockerfile should now look like the following.
+```
+#Start from jammy base Ubuntu image.
+FROM ubuntu:jammy
 
 #Install cowsay
 RUN apt-get update \
@@ -219,8 +221,9 @@ RUN apt-get update \
 #Add cowsay to the PATH variable
 ENV PATH="$PATH:/usr/games"
 RUN export PATH
+```
 
-## Using a Docker Container on the Compute1 Platform
+## Using a Docker Container on the Compute2 Platform
 
 Now that we have our docker container created and uploaded to Docker Hub, we can use it to run the software we installed on the RIS Compute Platform.
 
