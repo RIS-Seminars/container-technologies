@@ -379,23 +379,34 @@ mkdir -p /storageN/fs1/allocation_name/podman/runtime
 * Then we will need to start up an interactive job with variables that are set to the directory that we created.
 
 ```
-XDG_CONFIG_HOME=/scratch2/fs1/allocation_name/podman \         # defualt: $HOME/.config 
-XDG_DATA_HOME=/scratch2/fs1/allocation_name/podman \           # default: $HOME/.local/share 
-XDG_RUNTIME_DIR=/scratch2/fs1/allocation_name/podman/runtime \ # default: /run/user/$UID 
+XDG_CONFIG_HOME=/storageN/fs1/allocation_name/podman \         # defualt: $HOME/.config 
+XDG_DATA_HOME=/storageN/fs1/allocation_name/podman \           # default: $HOME/.local/share 
+XDG_RUNTIME_DIR=/storageN/fs1/allocation_name/podman/runtime \ # default: /run/user/$UID 
 srun -A compute2-group -p general-interactive --pty /bin/bash
 ```
 
-Then we need to use the following command to build and push our Docker image.
+* Now that we have an interactive job, we can work to build our Docker image.
+* We will need to initiate and start up the virtual machine.
 
-bsub -G compute-workshop -q workshop-interactive -Is -a 'docker_build(username/docker-example)' -- latest docker-example
+```
+podman machine init
+podman machine start
+```
 
-Where username is your Docker Hub username.
+> [!NOTE]
+> This can take a bit of time to get started.
 
-Once this is entered you will see the normal Docker building information. 
+* Next we run the build command.
 
-Now that the container is built and pushed, we can use the container like we need above in order to have our fortune telling cow.
+```
+podman build -t docker-example .
+```
 
-export LSF_DOCKER_PRESERVE_ENVIRONMENT=false
-bsub -Is -q workshop-interactive -G compute-workshop -a 'docker(username/docker-example:latest)' /bin/bash -c "fortune | cowsay"
+* If we are not in the directory of our Dockerfile or it is not named one of the valid "default" names, we will need to add the `-f` option.
+* Default names:
+   * Dockerfile
+   * Containerfile
 
-
+```
+podman build -t docker-example -f ./Dockerfile .
+```
